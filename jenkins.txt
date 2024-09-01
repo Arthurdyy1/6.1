@@ -1,0 +1,63 @@
+Started by user Yuyao Duan
+[Pipeline] Start of Pipeline
+[Pipeline] node
+Running on Jenkins in C:\Users\arthu\AppData\Local\Jenkins\.jenkins\workspace\6.1c
+[Pipeline] {
+[Pipeline] withEnv
+[Pipeline] {
+[Pipeline] stage
+[Pipeline] { (Build)
+[Pipeline] echo
+Building the code...
+[Pipeline] }
+[Pipeline] // stage
+[Pipeline] stage
+[Pipeline] { (Unit and Integration Tests)
+[Pipeline] echo
+Running Unit and Integration Tests...
+[Pipeline] }
+[Pipeline] // stage
+[Pipeline] stage
+[Pipeline] { (Code Analysis)
+[Pipeline] echo
+Performing Code Analysis...
+[Pipeline] }
+[Pipeline] // stage
+[Pipeline] stage
+[Pipeline] { (Security Scan)
+[Pipeline] echo
+Performing Security Scan...
+Post stage
+[Pipeline] mail
+[Pipeline] }
+[Pipeline] // stage
+[Pipeline] stage
+[Pipeline] { (Deploy to Staging)
+[Pipeline] echo
+Deploying to Staging...
+[Pipeline] }
+[Pipeline] // stage
+[Pipeline] stage
+[Pipeline] { (Integration Tests on Staging)
+[Pipeline] echo
+Running Integration Tests on Staging...
+[Pipeline] }
+[Pipeline] // stage
+[Pipeline] stage
+[Pipeline] { (Deploy to Production)
+[Pipeline] echo
+Deploying to Production...
+[Pipeline] }
+[Pipeline] // stage
+[Pipeline] stage
+[Pipeline] { (Declarative: Post Actions)
+[Pipeline] echo
+Pipeline completed successfully!
+[Pipeline] }
+[Pipeline] // stage
+[Pipeline] }
+[Pipeline] // withEnv
+[Pipeline] }
+[Pipeline] // node
+[Pipeline] End of Pipeline
+Finished: SUCCESS
