@@ -2,65 +2,99 @@ pipeline {
     agent any
     environment {
         RECIPIENT = 'fususu1234@gmail.com'
+        LOG_FILE = 'pipeline-log.txt'
     }
     stages {
         stage('Build') {
             steps {
-                echo 'Building the code...'
-                
+                script {
+                    def message = 'Stage 1: Build - Using Maven to compile and package the code.\n'
+                    writeFile file: env.LOG_FILE, text: message
+                    echo message
+                }
             }
         }
         stage('Unit and Integration Tests') {
             steps {
-                echo 'Running Unit and Integration Tests...'
-                
+                script {
+                    def message = 'Stage 2: Unit and Integration Tests - Running tests using JUnit.\n'
+                    def previousLog = readFile(env.LOG_FILE)
+                    writeFile file: env.LOG_FILE, text: previousLog + message
+                    echo message
+                }
             }
         }
         stage('Code Analysis') {
             steps {
-                echo 'Performing Code Analysis...'
-                
+                script {
+                    def message = 'Stage 3: Code Analysis - Analyzing code using SonarQube.\n'
+                    def previousLog = readFile(env.LOG_FILE)
+                    writeFile file: env.LOG_FILE, text: previousLog + message
+                    echo message
+                }
             }
         }
         stage('Security Scan') {
             steps {
-                echo 'Performing Security Scan...'
-                
+                script {
+                    def message = 'Stage 4: Security Scan - Performing security scan using OWASP Dependency-Check.\n'
+                    def previousLog = readFile(env.LOG_FILE)
+                    writeFile file: env.LOG_FILE, text: previousLog + message
+                    echo message
+                }
             }
             post {
                 always {
-                    mail to: "${env.RECIPIENT}",
-                         subject: "Security Scan Completed",
-                         body: "The security scan stage has been completed. Please check the Jenkins console output for more details."
+                    script {
+                        def stageStatus = currentBuild.result ?: 'SUCCESS'
+                        def logContent = readFile(env.LOG_FILE)
+                        mail to: "${env.RECIPIENT}",
+                             subject: "Security Scan ${stageStatus}",
+                             body: "The security scan stage has ${stageStatus}.\n\nLogs:\n${logContent}"
+                    }
                 }
             }
         }
         stage('Deploy to Staging') {
             steps {
-                echo 'Deploying to Staging...'
-                
+                script {
+                    def message = 'Stage 5: Deploy to Staging - Deploying application to AWS EC2 instance.\n'
+                    def previousLog = readFile(env.LOG_FILE)
+                    writeFile file: env.LOG_FILE, text: previousLog + message
+                    echo message
+                }
             }
         }
         stage('Integration Tests on Staging') {
             steps {
-                echo 'Running Integration Tests on Staging...'
-                
+                script {
+                    def message = 'Stage 6: Integration Tests on Staging - Running integration tests on the staging environment.\n'
+                    def previousLog = readFile(env.LOG_FILE)
+                    writeFile file: env.LOG_FILE, text: previousLog + message
+                    echo message
+                }
             }
         }
         stage('Deploy to Production') {
             steps {
-                echo 'Deploying to Production...'
-                
+                script {
+                    def message = 'Stage 7: Deploy to Production - Deploying application to production server.\n'
+                    def previousLog = readFile(env.LOG_FILE)
+                    writeFile file: env.LOG_FILE, text: previousLog + message
+                    echo message
+                }
             }
         }
     }
     post {
-        success {
-            echo 'Pipeline completed successfully!'
-        }
-        failure {
-            echo 'Pipeline failed!'
+        always {
+            script {
+                def pipelineStatus = currentBuild.result ?: 'SUCCESS'
+                def logContent = readFile(env.LOG_FILE)
+                mail to: "${env.RECIPIENT}",
+                     subject: "Jenkins Pipeline ${pipelineStatus}",
+                     body: "The Jenkins pipeline has ${pipelineStatus}.\n\nLogs:\n${logContent}"
+            }
         }
     }
 }
-
